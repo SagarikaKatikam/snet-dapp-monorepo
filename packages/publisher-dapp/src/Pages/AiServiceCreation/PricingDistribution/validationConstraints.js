@@ -1,5 +1,8 @@
 export const servicePricingValidationConstraints = {
   website: { url: { schemes: ["https"] } },
+  freeCallsAllowed: {
+    numericality: { onlyInteger: true, greaterThanOrEqualTo: 0 },
+  },
   price: { numericality: { onlyInteger: true, greaterThan: 0 } },
   "assets.protoFiles.url": {
     presence: {
