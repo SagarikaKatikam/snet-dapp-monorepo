@@ -16,7 +16,7 @@ import { ConfigurationServiceRequest } from "../../../../../Utils/Daemon/Configu
 import AlertBox, { alertTypes } from "shared/dist/components/AlertBox";
 import { aiServiceDetailsActions } from "../../../../../Services/Redux/actionCreators";
 import { checkIfKnownError } from "shared/dist/utils/error";
-import { generateDetailedErrorMessageFromValidation } from "../../../../../Utils/validation";
+import { generateDetailedErrorMessageFromValidation } from "./MultiDaemonValidation";
 import { serviceCreationStatus } from "../../../../AiServiceCreation/constant";
 import { ServiceCreationRoutes } from "../../../../AiServiceCreation/ServiceCreationRouter/Routes";
 
@@ -86,21 +86,18 @@ const ServiceStatusDetails = props => {
                 }
               });
             });
-            errorMessage = generateDetailedErrorMessageFromValidation(DaemonConfigvalidateAlert);
+            errorMessage = generateDetailedErrorMessageFromValidation(endpoint, DaemonConfigvalidateAlert);
             multiErrors.push(errorMessage);
-            setAlert({ type: alertTypes.ERROR, children: multiErrors });
           } catch (error) {
-            DaemonConfigvalidateAlert.push(endpoint + " is not a valid endpoint ");
-            errorMessage = generateDetailedErrorMessageFromValidation(DaemonConfigvalidateAlert);
-            multiErrors.push(errorMessage);
-            setAlert({ type: alertTypes.ERROR, children: multiErrors });
+            multiErrors.push(endpoint + " is not a valid endpoint ");
           }
-          if (isEmpty(DaemonConfigvalidateAlert)) {
-            await dispatch(aiServiceDetailsActions.saveServiceDetails(result[0].orgUuid, serviceUuid, result[0], true));
-          } else {
-            errorMessage = generateDetailedErrorMessageFromValidation(DaemonConfigvalidateAlert);
-            setAlert({ type: alertTypes.ERROR, children: errorMessage });
-          }
+        }
+        if (isEmpty(DaemonConfigvalidateAlert)) {
+          await dispatch(
+            aiServiceDetailsActions.submitServiceDetailsForReview(result[0].orgUuid, serviceUuid, result[0], true)
+          );
+        } else {
+          setAlert({ type: alertTypes.ERROR, children: multiErrors });
         }
       });
     } catch (error) {
