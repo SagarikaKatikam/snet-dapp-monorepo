@@ -21,7 +21,7 @@ import { generateDetailedErrorMessageFromValidation } from "../../../Utils/valid
 const OrganizationProfile = ({ classes, history, handleFinishLater }) => {
   const organization = useSelector(state => state.organization);
   const [alert, setAlert] = useState({});
-  const [invalidFieldsFlag, setInvalidFieldsFlag] = useState();
+  const [invalidFieldsFlag, setInvalidFieldsFlag] = useState({});
   const validateForm = () => {
     let isNotValid = validator(organization, orgProfileValidationConstraints);
     if (isNotValid) {
