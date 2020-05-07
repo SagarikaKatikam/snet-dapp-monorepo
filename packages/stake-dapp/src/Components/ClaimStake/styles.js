@@ -50,9 +50,12 @@ export const useStyles = makeStyles(MUITheme => ({
     },
   },
   infoBox: {
-    padding: "0 30px",
-    margin: "32px 0 15px",
+    margin: "32px 32px 0",
+    display: "flex",
+    justifyContent: "center",
     "& > div": {
+      width: "100%",
+      marginTop: 0,
       display: "flex",
       "& svg": {
         marginRight: 17,
@@ -89,5 +92,7 @@ export const useStyles = makeStyles(MUITheme => ({
     fontWeight: 600,
     letterSpacing: 0.25,
   },
-  alertBoxContainer: { margin: "0 30px" },
+  alertBoxContainer: {
+    margin: "20px 32px 0",
+  },
 }));

@@ -8,7 +8,7 @@ import NoDataFoundImg from "shared/dist/assets/images/NoDataFound.png";
 
 import { useStyles } from "./styles";
 import StakeSession from "../StakeSession";
-import { yourStakeDetails, stakeSessionDetails, incubationProgressDetails, agreementDetails } from "./content";
+import { cardDetails, incubationProgressDetails, agreementDetails } from "./content";
 import InlineLoader from "../InlineLoader";
 import NoMetaMask from "../NoMetamask";
 
@@ -49,8 +49,7 @@ const UserStake = () => {
         <Grid key={stake.stakeMapIndex} item xs={12} sm={12} md={12} lg={12} className={classes.userStakeContainerItem}>
           <StakeSession
             incubationProgressDetails={incubationProgressDetails(stake)}
-            yourStakeDetails={yourStakeDetails(stake)}
-            sessionDetails={stakeSessionDetails(stake)}
+            cardDetails={cardDetails(stake)}
             agreementDetails={agreementDetails}
             stakeDetails={stake}
           />

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import BigNumber from "bignumber.js";
 
 import Typography from "@material-ui/core/Typography";
 import moment from "moment";
@@ -10,7 +9,7 @@ import AlertBox, { alertTypes } from "shared/dist/components/AlertBox";
 import IncubationProgressDetails from "./IncubationProgressDetails";
 import Agreement from "./Agreement";
 import InfoBox from "./InfoBox";
-import CardCollection from "./CardCollection";
+import Card from "./Card";
 import Button from "./Button";
 import { useStyles } from "./styles";
 import { LoaderContent } from "../../Utils/Loader";
@@ -18,13 +17,12 @@ import { loaderActions, stakeActions } from "../../Services/Redux/actionCreators
 import { updateAutoRenewalV2 } from "../../Utils/BlockchainHelper";
 
 const StakeSession = ({
+  cardDetails,
   incubationProgressDetails,
   agreementDetails,
   btnDetails,
   handleClick,
   stakeDetails,
-  yourStakeDetails,
-  sessionDetails,
 }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -58,18 +56,6 @@ const StakeSession = ({
       stakeDetails.openForExternal === false
     ) {
       return true;
-    }
-
-    if (
-      currentTimestamp >= stakeDetails.startPeriod &&
-      currentTimestamp <= stakeDetails.submissionEndPeriod &&
-      stakeDetails.openForExternal === true
-    ) {
-      // myStakeAutoRenewed only for Open Stake Details
-      const myStakeAutoRenewed = new BigNumber(stakeDetails.myStakeAutoRenewed);
-      if (myStakeAutoRenewed.gt(0)) {
-        return true;
-      }
     }
 
     // Check for Non Auto Renewal Period
@@ -177,26 +163,28 @@ const StakeSession = ({
       </div>
       <div className={classes.content}>
         <IncubationProgressDetails details={incubationProgressDetails} />
-        <CardCollection yourStakeData={yourStakeDetails} sessionDetailsData={sessionDetails} />
+        <div className={classes.cards}>
+          {cardDetails.map(item => (
+            <Card key={item.title} title={item.title} value={item.value} unit={item.unit} toolTip={item.toolTip} />
+          ))}
+        </div>
+        <Agreement
+          details={agreementDetails}
+          autoRenewal={autoRenewal}
+          handleChange={handleAutoRenewalChange}
+          disableAutoRenewal={disableAutoRenewal()}
+        />
+        <div className={classes.alertBoxConatiner}>
+          <InfoBox stakeDetails={stakeDetails} />
+          <AlertBox type={alert.type} message={alert.message} />
+        </div>
+        <Button
+          details={btnDetails}
+          handleClick={handleClick}
+          autoRenewal={autoRenewal}
+          disableUserStakeActions={disableUserStakeActions()}
+        />
       </div>
-      <Agreement
-        details={agreementDetails}
-        autoRenewal={autoRenewal}
-        handleChange={handleAutoRenewalChange}
-        disableAutoRenewal={disableAutoRenewal()}
-      />
-      <div className={classes.infoBox}>
-        <InfoBox stakeDetails={stakeDetails} />
-      </div>
-      <div className={classes.alertBoxContainer}>
-        <AlertBox type={alert.type} message={alert.message} />
-      </div>
-      <Button
-        details={btnDetails}
-        handleClick={handleClick}
-        autoRenewal={autoRenewal}
-        disableUserStakeActions={disableUserStakeActions()}
-      />
     </div>
   );
 };

@@ -9,10 +9,10 @@ import AlertBox, { alertTypes } from "shared/dist/components/AlertBox";
 import SNETButton from "shared/dist/components/SNETButton";
 import NoDataFoundImg from "shared/dist/assets/images/NoDataFound.png";
 
-import { yourStakeDetails, sessionDetails, btnDetails } from "./content";
+import { cardDetails, btnDetails } from "./content";
 import { useStyles } from "./styles";
 import AccountBalance from "../AccountBalance";
-import CardCollection from "../StakeSession/CardCollection";
+import Card from "../StakeSession/Card";
 import InfoBox from "../StakeSession/InfoBox";
 import { LoaderContent } from "../../Utils/Loader";
 import { loaderActions, stakeActions, tokenActions } from "../../Services/Redux/actionCreators";
@@ -203,7 +203,11 @@ const ClaimStake = () => {
                 Stake Session - {moment.unix(stake.startPeriod).format("MMM YYYY")} #{stake.stakeMapIndex}
               </Typography>
             </div>
-            <CardCollection yourStakeData={yourStakeDetails(stake)} sessionDetailsData={sessionDetails(stake)} />
+            <div className={classes.cards}>
+              {cardDetails(stake).map(card => (
+                <Card key={card.title} title={card.title} value={card.value} unit={card.unit} toolTip={card.toolTip} />
+              ))}
+            </div>
             <div className={classes.infoBox}>
               <InfoBox stakeDetails={stake} />
             </div>
